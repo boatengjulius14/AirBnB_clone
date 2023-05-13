@@ -124,6 +124,7 @@ user@ubuntu:~/AirBnB$ ./console.py`
 The recognizable commands by the interpreter are the following:
 
 **Command and their Description**
+```
 quit or EOF	Exits the program
 Usage	By itself
 -----	-----
@@ -147,6 +148,7 @@ Usage	update <class name> <id> <attribute name> "<attribute value>" ---or--- <cl
 -----	-----
 count	Retrieve the number of instances of a class.
 Usage	<class name>.count()
+```
 
 Author
 Addai-Boateng Julius
