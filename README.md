@@ -2,6 +2,7 @@
 ![68747470733a2f2f7777772e706e676974656d2e636f6d2f70696d67732f6d2f3133322d313332323132355f7472616e73706172656e742d6261636b67726f756e642d616972626e622d6c6f676f2d68642d706e672d646f776e6c6f61642e706e67](https://github.com/boatengjulius14/AirBnB_clone/assets/113606541/997941eb-336b-400e-b7f0-b73861ed629f)
 
 **Project Description**
+
 This is the first part of the AirBnB clone project where we worked on the backend of the project whiles interfacing it with a console application with the help of the cmd module in python.
 
 Data (python objects) generated are stored in a json file and can be accessed with the help of the json module in python
@@ -27,9 +28,11 @@ And as part of the implementation of the command line interpreter coupled with t
 * Destroying an object
 
 **How to start it**
+
 These instructions will get you a copy of the project up and running on your local machine (Linux distro) for development and testing purposes.
 
 **Installing**
+
 You will need to clone the repository of the project from Github. This will contain the simple shell program and all of its dependencies.
 
 ```git clone https://github.com/jzamora5/AirBnB_clone.git```
@@ -58,9 +61,11 @@ models/review.py: Review class that inherits from BaseModel
 ```
 
 **How to use it**
+
 It can work in two different modes:
 
 **Interactive and Non-interactive.**
+
 In Interactive mode, the console will display a prompt (hbnb) indicating that the user can write and execute a command. After the command is run, the prompt will appear again a wait for a new command. This can go indefinitely as long as the user does not exit the program.
 ```
 $ ./console.py
@@ -129,9 +134,11 @@ user@ubuntu:~/AirBnB$ ./console.py`
 ```
 
 **Available commands and what they do**
+
 The recognizable commands by the interpreter are the following:
 
 **Command and their Description**
+
 ```
 quit or EOF	Exits the program
 Usage	By itself
@@ -157,6 +164,7 @@ Usage	update <class name> <id> <attribute name> "<attribute value>" ---or--- <cl
 count	Retrieve the number of instances of a class.
 Usage	<class name>.count()
 ```
+
 
 **Author**
 
