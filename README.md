@@ -17,6 +17,7 @@ Some of the commands available are:
 * update
 * destroy
 * count
+
 And as part of the implementation of the command line interpreter coupled with the backend and file storage system, the folowing actions can be performed:
 
 * Creating new objects (ex: a new User or a new Place)
@@ -31,10 +32,11 @@ These instructions will get you a copy of the project up and running on your loc
 **Installing**
 You will need to clone the repository of the project from Github. This will contain the simple shell program and all of its dependencies.
 
-`git clone https://github.com/jzamora5/AirBnB_clone.git`
+```git clone https://github.com/jzamora5/AirBnB_clone.git```
 After cloning the repository you will have a folder called AirBnB_clone. In here there will be several files that allow the program to work.
 
-`/console.py : The main executable of the project, the command interpreter.
+```
+/console.py : The main executable of the project, the command interpreter.
 
 models/engine/file_storage.py: Class that serializes instances to a JSON file and deserializes JSON file to instances
 
@@ -52,15 +54,16 @@ models/amenity.py: Amenity class that inherits from BaseModel
 
 models/place.py: Place class that inherits from BaseModel
 
-models/review.py: Review class that inherits from BaseModel`
+models/review.py: Review class that inherits from BaseModel
+```
 
 **How to use it**
 It can work in two different modes:
 
 **Interactive and Non-interactive.**
 In Interactive mode, the console will display a prompt (hbnb) indicating that the user can write and execute a command. After the command is run, the prompt will appear again a wait for a new command. This can go indefinitely as long as the user does not exit the program.
-
-`$ ./console.py
+```
+$ ./console.py
 (hbnb) help
 
 Documented commands (type help <topic>):
@@ -70,10 +73,12 @@ EOF  help  quit
 (hbnb) 
 (hbnb) 
 (hbnb) quit
-$`
+$
+```
 In Non-interactive mode, the shell will need to be run with a command input piped into its execution so that the command is run as soon as the Shell starts. In this mode no prompt will appear, and no further input will be expected from the user.
 
-`$ echo "help" | ./console.py
+```
+$ echo "help" | ./console.py
 (hbnb)
 
 Documented commands (type help <topic>):
@@ -91,7 +96,8 @@ Documented commands (type help <topic>):
 ========================================
 EOF  help  quit
 (hbnb) 
-$`
+$
+```
 
 **Format of Command Input**
 In order to give commands to the console, these will need to be piped through an echo in case of Non-interactive mode.
@@ -150,6 +156,6 @@ count	Retrieve the number of instances of a class.
 Usage	<class name>.count()
 ```
 
-Author
+**Author**
 Addai-Boateng Julius
 Patiko Tasha
