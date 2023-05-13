@@ -7,11 +7,17 @@ import uuid
 class BaseModel:
     """Definition of BaseModel"""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """constructor"""
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key in ['created_at', 'updated_at']:
+                    self.__dict__[key] = datetime.fromisoformat(value)
+                elif key != "__class__":
+                    self.__dict__[key] = value
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = self.updated_at = datetime.now()
 
     def __str__(self):
         """Returns an informal string representation"""
