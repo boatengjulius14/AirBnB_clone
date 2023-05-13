@@ -166,7 +166,8 @@ Usage	<class name>.count()
 ```
 
 
-**Author**
+**Authors**
 
 Addai-Boateng Julius
+
 Patiko Tasha
