@@ -16,8 +16,10 @@ class BaseModel:
                 elif key != "__class__":
                     self.__dict__[key] = value
         else:
+            from models import storage
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
+            storage.new(self)
 
     def __str__(self):
         """Returns an informal string representation"""
@@ -28,7 +30,9 @@ class BaseModel:
         """updates the attribute 'update_at' with the current
         datetime
         """
+        from models import storage
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """returns a dictionary containing all keys/values
