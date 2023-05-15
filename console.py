@@ -5,12 +5,13 @@ The entry point of the command interpreter
 import cmd
 from models.base_model import BaseModel
 from models import storage
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
     """Definition of HBNBCommand Class"""
-    prompt = "(hbnb) "
-    CLASS_NAMES = ["BaseModel"]
+    prompt = "(hbnb)"
+    CLASS_NAMES = ["BaseModel", "User"]
 
     def do_quit(self, line):
         """quit command to exit the program"""
