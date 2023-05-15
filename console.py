@@ -18,6 +18,24 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
     class_names = ["BaseModel", "User", "State", "City", "Amenity",
                    "Place", "Review"]
+    parse_commands = ["all", "count", "show", "destroy"]
+
+    @staticmethod
+    def parse_line(line):
+        arg = ""
+        symbols = ['.', '(', ')']
+
+        if all(sym in line for sym in symbols)\
+            and line.count('(') == 1 and line.count(')') == 1\
+                and line.count('.') == 1:
+            _class, _command = line.strip(')').split('.')
+
+            if '(' in _command:
+                _command, arg = _command.split('(')
+
+            if _command in HBNBCommand.parse_commands:
+                line = _command + ' ' + _class + ' ' + arg
+        return line
 
     def do_quit(self, line):
         """quit command to exit the program"""
@@ -143,6 +161,13 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
             storage.save()
+
+    def do_count(self, line):
+        """prints the number of instances of a class"""
+        print(len([x for x in storage.all() if x.count(line)]))
+
+    def precmd(self, line):
+        return cmd.Cmd.precmd(self,  HBNBCommand.parse_line(line))
 
 
 if __name__ == "__main__":
