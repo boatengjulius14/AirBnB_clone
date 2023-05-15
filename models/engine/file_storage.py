@@ -3,13 +3,12 @@
 import json
 from models.base_model import BaseModel
 from models.user import User
-import os
 
 
 class FileStorage:
     """Definition of FileStorage Class"""
 
-    __file_path = 'file.json'
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
@@ -26,7 +25,7 @@ class FileStorage:
         """serializes __objects to JSON file
         (path: __file_path)
         """
-        with open(self.__file_path, "w") as file:
+        with open(self.__file_path, mode="w") as file:
             temp_dict = {}
             for key, obj in self.__objects.items():
                 temp_dict[key] = obj.to_dict()
