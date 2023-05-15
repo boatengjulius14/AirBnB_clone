@@ -10,8 +10,8 @@ from models.user import User
 
 class HBNBCommand(cmd.Cmd):
     """Definition of HBNBCommand Class"""
-    prompt = "(hbnb)"
-    CLASS_NAMES = ["BaseModel", "User"]
+    prompt = "(hbnb) "
+    class_names = ["BaseModel", "User"]
 
     def do_quit(self, line):
         """quit command to exit the program"""
@@ -30,15 +30,15 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, line):
-        """Creates a new instance of BaseModel, saves it
+        """Creates a new instance of class, saves it
         (to the JSON file) and prints the id
         """
         if line == "":
             print("** class name missing **")
-        elif line not in self.CLASS_NAMES:
+        elif line not in HBNBCommand.class_names:
             print("** class doesn't exist **")
         else:
-            obj = BaseModel()
+            obj = eval(line)()
             obj.save()
             print(obj.id)
 
@@ -56,10 +56,10 @@ class HBNBCommand(cmd.Cmd):
             while ('' in _list):
                 _list.remove('')
 
-        elif line != "BaseModel":
+        elif line not in HBNBCommand.class_names:
             print("** class doesn't exist **")
 
-        elif line == "BaseModel":
+        elif line in HBNBCommand.class_names:
             print("** instance id missing **")
         return _list
 
@@ -69,7 +69,7 @@ class HBNBCommand(cmd.Cmd):
         """
         _list = HBNBCommand.analyze_line(line)
         if _list != []:
-            if len(_list) == 2 and _list[0] in self.CLASS_NAMES:
+            if len(_list) == 2 and _list[0] in HBNBCommand.class_names:
                 store_obj = storage.all()
                 input = '{}.{}'.format(*_list)
                 if input in store_obj:
@@ -83,7 +83,7 @@ class HBNBCommand(cmd.Cmd):
         """
         _list = HBNBCommand.analyze_line(line)
         if _list != []:
-            if len(_list) == 2 and _list[0] in self.CLASS_NAMES:
+            if len(_list) == 2 and _list[0] in HBNBCommand.class_names:
                 store_obj = storage.all()
                 input = '{}.{}'.format(*_list)
                 if input in store_obj:
@@ -99,7 +99,7 @@ class HBNBCommand(cmd.Cmd):
         if line == "":
             print([str(x) for x in storage.all().values()])
         else:
-            if line in self.CLASS_NAMES:
+            if line in HBNBCommand.class_names:
                 print([str(x) for x in storage.all().values()
                        if line in str(x)])
             else:
