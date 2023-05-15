@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 """Unittess for the base_model model"""
 from datetime import datetime
+from models import storage
 from models.base_model import BaseModel
+import os
 import time
 import unittest
 from uuid import uuid4
@@ -33,6 +35,65 @@ class TestBaseModel(unittest.TestCase):
                          "[BaseModel] ({}) {}".format(self.obj.id,
                                                       self.obj.__dict__))
 
+    def test_save_method(self):
+        self.obj.save()
+        self.assertNotEqual(self.obj.created_at, self.obj.updated_at)
+        self.assertLess(self.obj.created_at.microsecond,
+                        self.obj.updated_at.microsecond)
+
+        time1 = self.obj.updated_at
+        self.obj.save()
+        time.sleep(0.01)
+        time2 = self.obj.updated_at
+        self.assertGreater(time2, time1)
+        time.sleep(0.01)
+        self.obj.save()
+        self.assertGreater(self.obj.updated_at, time2)
+
+    def test_save_method1(self):
+        bm = BaseModel()
+        time.sleep(0.05)
+        first_updated_at = bm.updated_at
+        bm.save()
+        self.assertLess(first_updated_at, bm.updated_at)
+
+    def test_save_method2(self):
+        bm = BaseModel()
+        time.sleep(0.05)
+        first_updated_at = bm.updated_at
+        bm.save()
+        second_updated_at = bm.updated_at
+        self.assertLess(first_updated_at, second_updated_at)
+        time.sleep(0.05)
+        bm.save()
+        self.assertLess(second_updated_at, bm.updated_at)
+
+    def test_save_method3(self):
+        bm = BaseModel()
+        with self.assertRaises(TypeError):
+            bm.save(None)
+
+    def test_save_method4(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+        bm = BaseModel()
+        bm.save()
+        bmid = "BaseModel." + bm.id
+        with open("file.json", "r") as f:
+            self.assertIn(bmid, f.read())
+
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+
     def test_to_dict_method(self):
         self.assertEqual(type(self.obj.to_dict()), dict)
         self.assertEqual(self.obj.to_dict()["updated_at"],
@@ -45,6 +106,11 @@ class TestBaseModel(unittest.TestCase):
         attributes = ("id", "created_at", "updated_at", "__class__")
         for key in attributes:
             self.assertIn(key, self.obj.to_dict())
+        self.obj.name = "New_module"
+        self.obj.day = "Wednesday"
+        attributes += ("name", "day")
+        for i in attributes:
+            self.assertIn(i, self.obj.to_dict())
 
         obj = BaseModel()
         obj.id = "a6a6a6"
@@ -87,3 +153,26 @@ class TestBaseModel(unittest.TestCase):
             }
         obj = BaseModel(**_dict)
         self.assertTrue(hasattr(obj, "name"))
+
+    def test_storage(self):
+        _dict = {
+            "id": uuid4(), "created_at": datetime.now().isoformat(),
+            "updated_at": datetime.now().isoformat(),
+            "name": "New Model"
+            }
+        self.obj = BaseModel(**_dict)
+        self.assertTrue(self.obj not in storage.all().values(),
+                        "{}".format(storage.all().values()))
+
+        self.obj = BaseModel()
+        self.assertTrue(self.obj in storage.all().values())
+
+    def test_JSON_file_update(self):
+        self.obj.save()
+        obj_str = f"BaseModel.{self.obj.id}"
+        with open(f"file.json") as file:
+            self.assertIn(obj_str, file.read())
+
+
+if __name__ == "__main__":
+    unittest.main()
