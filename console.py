@@ -19,6 +19,7 @@ class HBNBCommand(cmd.Cmd):
     class_names = ["BaseModel", "User", "State", "City", "Amenity",
                    "Place", "Review"]
     parse_commands = ["all", "count", "show", "destroy", "update"]
+    dict_elem_no = 1
 
     @staticmethod
     def analyze_line(line):
@@ -66,14 +67,15 @@ class HBNBCommand(cmd.Cmd):
                     arg_list = arg.split(',')
                     arg = ' '.join(arg_list)
 
-        if all(sym in arg for sym in dict_symbols)\
-            and arg.count('{') == 1 and arg.count(':') == 1\
-                and arg.count('}') == 1:
+        if all(sym in arg for sym in dict_symbols):
+            HBNBCommand.dict_elem_no = arg.count(":")
             for sym in dict_symbols:
-                arg = arg.replace(sym, "")
+                if sym in arg:
+                    arg = arg.replace(sym, " ")
 
         if _command in HBNBCommand.parse_commands:
             line = ' '.join((_command, _class, arg))
+        print(line)
         return line
 
     def do_quit(self, line):
@@ -156,6 +158,7 @@ class HBNBCommand(cmd.Cmd):
         by adding or updating attributes(save the change into the JSON file)
         """
         _list = HBNBCommand.analyze_line(line)
+        print(_list)
         if _list != []:
             input = f'{_list[0]}.{_list[1]}'
             if input in storage.all():
@@ -164,15 +167,25 @@ class HBNBCommand(cmd.Cmd):
                 elif len(_list) == 3:
                     print("** value missing **")
                 else:
+                    key_idx = 2
+                    value_idx = 3
                     obj = storage.all()[input]
-                    if _list[2] in obj.__dict__:
-                        v_type = type(obj.__dict__[_list[2]])
-                        setattr(obj, _list[2], v_type(_list[3]))
-                    else:
-                        try:
-                            setattr(obj, _list[2], eval(_list[3]))
-                        except NameError:
-                            setattr(obj, _list[2], _list[3])
+                    while (HBNBCommand.dict_elem_no):
+                        if _list[key_idx] in obj.__dict__:
+                            v_type = type(obj.__dict__[_list[key_idx]])
+                            setattr(obj, _list[key_idx],
+                                    v_type(_list[value_idx]))
+                        else:
+                            try:
+                                setattr(obj, _list[key_idx],
+                                        eval(_list[value_idx]))
+                            except NameError:
+                                setattr(obj, _list[key_idx], _list[value_idx])
+                        key_idx += 2
+                        value_idx += 2
+                        HBNBCommand.dict_elem_no -= 1
+
+                    HBNBCommand.dict_elem_no = 1
 
             elif _list[0] not in HBNBCommand.class_names:
                 print("** class doesn't exist **")
