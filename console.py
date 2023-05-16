@@ -75,7 +75,6 @@ class HBNBCommand(cmd.Cmd):
 
         if _command in HBNBCommand.parse_commands:
             line = ' '.join((_command, _class, arg))
-        print(line)
         return line
 
     def do_quit(self, line):
@@ -158,7 +157,6 @@ class HBNBCommand(cmd.Cmd):
         by adding or updating attributes(save the change into the JSON file)
         """
         _list = HBNBCommand.analyze_line(line)
-        print(_list)
         if _list != []:
             input = f'{_list[0]}.{_list[1]}'
             if input in storage.all():
