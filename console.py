@@ -18,12 +18,42 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
     class_names = ["BaseModel", "User", "State", "City", "Amenity",
                    "Place", "Review"]
-    parse_commands = ["all", "count", "show", "destroy"]
+    parse_commands = ["all", "count", "show", "destroy", "update"]
+
+    @staticmethod
+    def analyze_line(line):
+        """Analyzes string and returns _list of arguments or an
+        empty list
+        """
+        _list = []
+        if line == "":
+            print("** class name missing **")
+
+        elif ' ' in line and line.count(' ') > 0:
+            _list = line.split(' ')
+            while ('' in _list):
+                _list.remove('')
+
+        elif line not in HBNBCommand.class_names:
+            print("** class doesn't exist **")
+
+        elif line in HBNBCommand.class_names:
+            print("** instance id missing **")
+        return _list
 
     @staticmethod
     def parse_line(line):
-        arg = ""
+        """Analyzes command and returns parsed string
+        to precmd module"""
+        arg = _command = ""
+
         symbols = ['.', '(', ')']
+        str_symbols = ["\"", "'"]
+        dict_symbols = ['{', ':', '}']
+
+        for i in line:
+            if i in str_symbols:
+                line = line.replace(i, "")
 
         if all(sym in line for sym in symbols)\
             and line.count('(') == 1 and line.count(')') == 1\
@@ -32,9 +62,18 @@ class HBNBCommand(cmd.Cmd):
 
             if '(' in _command:
                 _command, arg = _command.split('(')
+                if ',' in arg:
+                    arg_list = arg.split(',')
+                    arg = ' '.join(arg_list)
 
-            if _command in HBNBCommand.parse_commands:
-                line = _command + ' ' + _class + ' ' + arg
+        if all(sym in arg for sym in dict_symbols)\
+            and arg.count('{') == 1 and arg.count(':') == 1\
+                and arg.count('}') == 1:
+            for sym in dict_symbols:
+                arg = arg.replace(sym, "")
+
+        if _command in HBNBCommand.parse_commands:
+            line = ' '.join((_command, _class, arg))
         return line
 
     def do_quit(self, line):
@@ -65,27 +104,6 @@ class HBNBCommand(cmd.Cmd):
             obj = eval(line)()
             obj.save()
             print(obj.id)
-
-    @staticmethod
-    def analyze_line(line):
-        """Analyzes string and returns _list of arguments or an
-        empty list
-        """
-        _list = []
-        if line == "":
-            print("** class name missing **")
-
-        elif ' ' in line and line.count(' ') > 0:
-            _list = line.split(' ')
-            while ('' in _list):
-                _list.remove('')
-
-        elif line not in HBNBCommand.class_names:
-            print("** class doesn't exist **")
-
-        elif line in HBNBCommand.class_names:
-            print("** instance id missing **")
-        return _list
 
     def do_show(self, line):
         """Prints the string representation of an
@@ -164,7 +182,10 @@ class HBNBCommand(cmd.Cmd):
 
     def do_count(self, line):
         """prints the number of instances of a class"""
-        print(len([x for x in storage.all() if x.count(line)]))
+        if line in HBNBCommand.class_names:
+            print(len([x for x in storage.all() if x.count(line)]))
+        else:
+            print("** class doesn't exist **")
 
     def precmd(self, line):
         return cmd.Cmd.precmd(self,  HBNBCommand.parse_line(line))
